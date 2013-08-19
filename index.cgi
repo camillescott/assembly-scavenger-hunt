@@ -1,7 +1,7 @@
 #! /usr/bin/python
 print '''Content-type: text/html\n\n
 
-<h2>The shotgunator!</h2>
+<h2>The Assembly Scavenger Hunt!</h2>
 
 This is a simple script that "shotgun sequences" paragraphs of text,
 by producing "reads" of a configurable length, mutation rate, and
@@ -11,7 +11,7 @@ assembly to students.  <p> <p align='right'>--titus</font></p>
 <p>
 <hr>
 
-<form method='POST' action='shotgun.cgi'>
+<form method='POST' action='scavenge.cgi'>
 Enter some text to sequence (leave blank for Tale of Two Cities):<br>
 <textarea name='text' cols='60' rows='5'></textarea><br>
 <font size='-1'><i>Separate paragraphs by a blank line.</i>
@@ -40,7 +40,7 @@ If yes, insert size? <input type='text' name='insert' value='25' size='4'>
 <hr>
 Note, the source code is available <a href='http://github.com/ged-lab/assembly-exercise'>on github</a>.
 <p>
-<a href='http://ged.msu.edu/'>C. Titus Brown</a>, ctb@msu.edu.
+<a href='http://ged.msu.edu/'>CS Welcher</a>, welcherc@msu.edu.
 '''
 
 
