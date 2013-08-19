@@ -39,8 +39,12 @@ def bin_to_dna(bi):
 def dna_to_bin(dna):
 	bi = ''
 	for n in dna:
-		bi += dna_to_bin(n)
+		bi += dna_to_bin_table(n)
 	return bi
+
+def convert_text(text):
+    bi = text_to_bin(text)
+    return bin_to_dna(bi)
 
 def clean(text):
     data = text.split('\n\n')
@@ -140,13 +144,14 @@ def make_dir(tempdir):
     return dir, dirstub
 
 def iter_text(text):
-    tmp = text.split(sep='>')
+    tmp = text.split('>')
     for line in tmp:
         cov, _, words = line.partition('|')
         if not cov.isdigit():
             cov = -1
             words = line
-        yield cov, words
+        if len(words) > 0:
+            yield int(cov), words
 
 if __name__ == '__main__':
     coverage = DEFAULT_COVERAGE
@@ -195,7 +200,7 @@ if __name__ == '__main__':
     digest = h.hexdigest()
     
     if not do_paired:
-        tempdir, dirstub = make_dir('/home/cswelcher/public_html/tmp_files/reads')
+        tempdir, dirstub = make_dir('/home/cswelcher/public_html/assembly-scavenger-hunt/reads')
         samples = []
         total_len = 0
         fn = os.path.join(tempdir, 'scavenger_reads.fa')
@@ -204,6 +209,8 @@ if __name__ == '__main__':
                 if cov == -1:
                     cov = DEFAULT_COVERAGE
                 total_len += len(words)
+                print words
+                words = convert_text(words)
                 samples += fragment(words, read_length, cov, mutation_rate)
             if noise_ratio < 1.0:
                 noise_len = (1.0/noise_ratio) * total_len
@@ -217,8 +224,9 @@ if __name__ == '__main__':
         print '<!-- mut: %s / readlen: %d / cov: %s -->' % (mutation_rate,
                                                             read_length,
                                                             coverage)
+        print dirstub
         print '<pre>'
-        print 'Reads file: <a href="{}">scavenger_reads.fa</a>>'
+        print 'Reads file: <a href="{}">scavenger_reads.fa</a>'.format('reads/' + dirstub + '/scavenger_reads.fa')
 
         print ''
         print '</pre>'
