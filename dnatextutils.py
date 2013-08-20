@@ -13,7 +13,7 @@ def text_to_bin(text):
 def bin_to_text(bi):
     text = ''
     for i in range(0,len(bi),8):
-        print bi[i:i+8], int(bi[i:i+8],2)
+        #print bi[i:i+8], int(bi[i:i+8],2)
         bitstr = chr(int(bi[i:i+8],2))
         text += bitstr
     return text
@@ -28,7 +28,6 @@ def bin_to_dna(bi):
 def dna_to_bin(dna):
     bi = ''
     for n in dna:
-        bi += dna_to_bin_table[n]
+        if n in ['A', 'T', 'C', 'G', 'a', 't', 'c', 'g']:
+            bi += dna_to_bin_table[n.upper()]
     return bi
-
-def convert_text(text):
