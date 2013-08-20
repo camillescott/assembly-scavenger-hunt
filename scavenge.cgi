@@ -23,24 +23,30 @@ bin_to_dna_table = { '00':'A', '01':'G', '10':'C', '11':'T' }
 dna_to_bin_table = { 'A':'00', 'G':'01', 'C':'10', 'T':'11' }
 
 def text_to_bin(text):
-    return bin(int(binascii.hexlify(text), 16))
-
+    tmp = ''
+    for c in text:
+        bi = bin(int(binascii.hexlify(c),16))
+        tmp += bi[2:].zfill(8)
+    return tmp
 
 def bin_to_text(bi):
-    i = int(bi, 2)
-    return binascii.unhexlify('%x' % i)
+    text = ''
+    for i in range(0,len(bi),8):
+        text += binascii.unhexlify('%x' % int(bi[i:i+8], 2))
+    return  text
 
 def bin_to_dna(bi):
     dna = ''
     for i in range(0,len(bi),2):
-        dna += bin_to_dna_table[bi[i:i+1]]
+        key = bi[i:i+2]
+        dna += bin_to_dna_table[key]
     return dna
 
 def dna_to_bin(dna):
-	bi = ''
-	for n in dna:
-		bi += dna_to_bin_table(n)
-	return bi
+    bi = ''
+    for n in dna:
+        bi += dna_to_bin_table[n]
+    return bi
 
 def convert_text(text):
     bi = text_to_bin(text)
