@@ -19,21 +19,24 @@ DEFAULT_TEXT='''
 THIS IS THE MOST BORING SCAVENGER HUNT!
 '''
 
+
 bin_to_dna_table = { '00':'A', '01':'G', '10':'C', '11':'T' }
 dna_to_bin_table = { 'A':'00', 'G':'01', 'C':'10', 'T':'11' }
 
 def text_to_bin(text):
     tmp = ''
     for c in text:
-        bi = bin(int(binascii.hexlify(c),16))
+        bi = bin(ord(c))
         tmp += bi[2:].zfill(8)
     return tmp
 
 def bin_to_text(bi):
     text = ''
     for i in range(0,len(bi),8):
-        text += binascii.unhexlify('%x' % int(bi[i:i+8], 2))
-    return  text
+        print bi[i:i+8], int(bi[i:i+8],2)
+        bitstr = chr(int(bi[i:i+8],2))
+        text += bitstr
+    return text
 
 def bin_to_dna(bi):
     dna = ''
@@ -78,7 +81,7 @@ def random_seq(length):
     return x
 
 def fragment(text, read_length, coverage, mutation_rate):
-    data = clean(text)
+    data = [text]
 
     chooseme = []
     for n, i in enumerate(data):
@@ -91,6 +94,7 @@ def fragment(text, read_length, coverage, mutation_rate):
         seq = data[random.choice(chooseme)]
 
         start = random.choice(range(len(seq) - read_length))
+        start = start - (start % 4)
         read = seq[start:start + read_length]
 
         for k in range(0, read_length):
@@ -99,7 +103,7 @@ def fragment(text, read_length, coverage, mutation_rate):
                 s = ""
                 for p in range(len(read)):
                     if p == pos:
-                        s += random.choice('abcdefghijklmnopqrstuvwxyz_')
+                        s += random.choice('atcg')
                     else:
                         s += read[p]
                 read = s
@@ -215,7 +219,7 @@ if __name__ == '__main__':
                 if cov == -1:
                     cov = DEFAULT_COVERAGE
                 total_len += len(words)
-                print words
+                #print words
                 words = convert_text(words)
                 samples += fragment(words, read_length, cov, mutation_rate)
             if noise_ratio < 1.0:
